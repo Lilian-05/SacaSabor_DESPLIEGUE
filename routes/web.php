@@ -11,6 +11,9 @@ use App\Http\Controllers\PaginaController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\PropietarioController;
 use Illuminate\Support\Facades\Route;
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok'], 200);
+});
 
 Route::get('/mapa-seleccion', function () {
     return view('mapa-seleccion');
