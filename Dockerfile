@@ -1,8 +1,20 @@
+
 FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev libicu-dev libonig-dev \
-    && docker-php-ext-install pdo pdo_sqlite mbstring bcmath intl zip \
+    git \
+    unzip \
+    libzip-dev \
+    libicu-dev \
+    libonig-dev \
+    libsqlite3-dev \
+    sqlite3 \
+    && docker-php-ext-install \
+    pdo_sqlite \
+    mbstring \
+    bcmath \
+    intl \
+    zip \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
@@ -19,7 +31,9 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-RUN chown -R www-data:www-data storage bootstrap/cache
+RUN mkdir -p database storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache \
+    && touch database/database.sqlite \
+    && chown -R www-data:www-data storage bootstrap/cache database
 
 EXPOSE 10000
 
